@@ -1,0 +1,52 @@
+# Reusable workflow: checks that a pull request title follows the
+# Conventional Commits subset in ADR-0001. A repository calls it from a
+# short workflow of its own:
+#
+#   name: PR title
+#   on:
+#     pull_request:
+#       types: [opened, edited, synchronize, reopened]
+#   jobs:
+#     pr-title:
+#       uses: SalesWorks-IT/.github/.github/workflows/pr-title.yml@main
+#
+# The check reports pass or fail. It is not a required check, so it does
+# not block a merge. Types: feat, fix, docs, chore, refactor, test, ci.
+name: PR title
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check the pull request title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          set -euo pipefail
+
+          # The title goes through env, never into the script text.
+          # Generated messages are exempt, as in ADR-0001.
+          if [[ "$PR_TITLE" =~ ^(Merge\ |Revert\ \"|fixup!|squash!) ]]; then
+            echo "Generated title; exempt."
+            exit 0
+          fi
+
+          re='^(feat|fix|docs|chore|refactor|test|ci)(\([a-z0-9.-]+\))?!?: [a-z0-9]'
+          if [[ ! "$PR_TITLE" =~ $re ]] || (( ${#PR_TITLE} > 72 )); then
+            {
+              echo "::error title=PR title is not Conventional Commits::\"${PR_TITLE}\""
+              echo "Expected: <type>[(scope)][!]: <description>"
+              echo "Types: feat, fix, docs, chore, refactor, test, ci"
+              echo "Description starts lowercase, the whole title is 72 characters or fewer."
+              echo "Example: fix(auth): clear the session before redirecting to login"
+              echo "See https://github.com/SalesWorks-IT/.github/blob/main/docs/adr/0001-conventional-commits-and-branch-naming.md"
+            } >&2
+            exit 1
+          fi
+          echo "Title follows ADR-0001."
