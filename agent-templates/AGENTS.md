@@ -29,6 +29,18 @@ TODO: one or two sentences on what the repository does and who uses it.
 
 Run the tests and the linter before you open a pull request.
 
+## Commits and branches
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). The full rule is [ADR-0001](https://github.com/SalesWorks-IT/.github/blob/main/docs/adr/0001-conventional-commits-and-branch-naming.md).
+
+- **Commit and pull request title:** `<type>[(scope)][!]: <description>`. Imperative mood, lowercase after the colon, no trailing period, 72 characters or fewer.
+- **Types:** `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`, `build`, `perf`, `revert`. Do not invent others.
+- **Scope:** optional, lowercase. TODO: list this repository's scopes, or delete this line.
+- **Breaking change:** put `!` after the type or scope, or add a `BREAKING CHANGE:` footer.
+- **Branch name:** lowercase kebab-case, `<type>/<short-description>`, for example `fix/login-redirect`.
+- **Merging:** prefer squash merge, so the pull request title becomes the commit message.
+- Match the style of the existing `git log` in this repository when it already follows this format.
+
 ## Pull requests
 
 - Work on a branch and open a pull request. Do not push to the default branch.
