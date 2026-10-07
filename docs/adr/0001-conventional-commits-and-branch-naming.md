@@ -40,14 +40,13 @@ Adopt **Conventional Commits 1.0.0** for commit messages, and align **branch nam
 | `fix` | A bug fix |
 | `docs` | Documentation only |
 | `chore` | Maintenance with no change in production behaviour (dependencies, tooling) |
-| `refactor` | A code change that neither fixes a bug nor adds a feature |
+| `refactor` | A code change that neither fixes a bug nor adds a feature, including performance work |
 | `test` | Adding or updating tests only |
-| `ci` | CI/CD workflow and pipeline changes |
-| `build` | Build system or packaging changes |
-| `perf` | A performance improvement |
-| `revert` | Reverts a previous commit |
+| `ci` | CI/CD workflow and pipeline changes, including build scripts and pipeline files |
 
-Do not invent new types. Changing this list means amending this ADR.
+This is a deliberately small subset of Conventional Commits. When a change fits two types, use the one that matters most to a reader of the history, for example `feat` over `docs`. Do not invent new types. Changing this list means amending this ADR.
+
+Types from the full specification that we do not use: `build` (use `ci` for pipeline files, `chore` for dependencies), `perf` (use `refactor`, or `feat` or `fix` when behaviour changes), `style` (use `chore`), and `revert` (see [Merging](#merging)).
 
 ### Examples
 
@@ -75,7 +74,7 @@ The pull request title follows the commit format above. When the pull request is
 
 ### Merging
 
-Prefer **squash merge** for short-lived branches, so each pull request lands as one conventional commit. Merge commits that GitHub generates, and `fixup!` or `squash!` commits made during development, are exempt from the format.
+Prefer **squash merge**, so each pull request lands as one conventional commit. These messages are exempt from the format, because tools generate them: merge commits (`Merge …`), reverts made with `git revert` (`Revert "…"`), and `fixup!` or `squash!` commits made during development.
 
 History that exists before a repository adopts this ADR is not rewritten.
 
@@ -86,7 +85,7 @@ Adopting this ADR does not block anything on its own. Enforcement is a separate,
 | Layer | Mechanism | Status |
 |-------|-----------|--------|
 | **Guidance** | This ADR, the default `CONTRIBUTING.md`, and each repository's `AGENTS.md` | In place once accepted |
-| **Pull request title check** | A shared reusable workflow in this repository that a repository calls from a short workflow of its own | Follow-up |
+| **Pull request title check** | A shared reusable workflow in this repository that a repository calls from a short workflow of its own. It reports a failing check but does not block a merge | Proposed in its own pull request |
 | **Commit message check** | A `commit-msg` hook, for repositories that commit directly to the default branch | Follow-up |
 | **Organisation ruleset** | A commit message pattern rule applied across repositories | Depends on the GitHub plan; confirm before relying on it |
 
@@ -119,5 +118,4 @@ Adoption is phased. A repository adopts this ADR from its next commit, and recor
 ## References
 
 - [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)
-- [ADR-0002: Trunk-based development](0002-trunk-based-development.md)
 - Origin: ADR-0018 in the `supernova` repository
