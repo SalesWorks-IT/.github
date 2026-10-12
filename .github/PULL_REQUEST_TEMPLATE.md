@@ -12,6 +12,7 @@
 - [ ] Tests and linters pass
 - [ ] Docs are updated if behaviour changed
 - [ ] No secrets, credentials, or customer data are included
+- [ ] Merge with **Squash and merge**, unless this promotes one long-lived branch into another
 
 ## Related
 
