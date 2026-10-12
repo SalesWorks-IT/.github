@@ -29,6 +29,21 @@ TODO: one or two sentences on what the repository does and who uses it.
 
 Run the tests and the linter before you open a pull request.
 
+## Code quality
+
+The full rule is [ADR-0003](https://github.com/SalesWorks-IT/.github/blob/main/docs/adr/0003-code-quality-and-agentic-contributions.md).
+
+- **Smallest correct diff.** Solve the stated problem only. No unrelated refactors, renames, or speculative features. Split a large change.
+- **Terse and readable.** Short functions, clear names, dead code deleted. No helper or class used only once.
+- **Match the existing code.** Read the surrounding code first. Follow its naming, imports, and error handling.
+- **Comments say why, not what.** No banners and no running commentary on obvious code.
+- **No new dependency** without a justification in the pull request.
+- **Handle failure paths,** not only the happy path. Never swallow an error silently.
+- **Tests assert intended behaviour,** not whatever the code does. Update them when behaviour changes.
+- **Never weaken a check.** Do not disable, skip, or relax a test, linter, or CI step to make a change pass.
+- **High-risk changes need a human.** Authentication, authorisation, personal data, database migrations, public APIs, CI and deployment pipelines, `AGENTS.md`, and `CODEOWNERS`: draft if asked, but a tech lead approves.
+- **Say when AI wrote it** (recommended): a `Co-Authored-By` trailer or a line in the pull request description.
+
 ## Commits and branches
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). The full rule is [ADR-0001](https://github.com/SalesWorks-IT/.github/blob/main/docs/adr/0001-conventional-commits-and-branch-naming.md).

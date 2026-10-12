@@ -6,5 +6,6 @@ Decisions that apply across SalesWorks-IT repositories. A repository may add its
 |-----|-------|--------|
 | [0001](0001-conventional-commits-and-branch-naming.md) | Conventional Commits, branch naming, and pull request titles | Proposed |
 | [0002](0002-trunk-based-development.md) | Trunk-based development | Proposed |
+| [0003](0003-code-quality-and-agentic-contributions.md) | Code quality and agentic contributions | Proposed |
 
 New ADRs start from [`template.md`](template.md) and need approval from the `tech-leads` team.
