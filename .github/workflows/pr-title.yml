@@ -10,8 +10,13 @@
 #     pr-title:
 #       uses: SalesWorks-IT/.github/.github/workflows/pr-title.yml@main
 #
-# The check reports pass or fail. It is not a required check, so it does
-# not block a merge. Types: feat, fix, docs, chore, refactor, test, ci.
+# Two jobs run:
+#   check        the title follows ADR-0001. Reports pass or fail.
+#   branch-name  the branch name follows ADR-0001. Reports a warning only,
+#                because a branch cannot be renamed once its pull request is
+#                open, so a red check could not be fixed.
+# Neither is a required check, so neither blocks a merge.
+# Types: feat, fix, docs, chore, refactor, test, ci.
 name: PR title
 
 on:
@@ -50,3 +55,34 @@ jobs:
             exit 1
           fi
           echo "Title follows ADR-0001."
+
+  branch-name:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check the branch name
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          set -euo pipefail
+
+          # The branch name goes through env, never into the script text.
+          # Long-lived and bot branches are exempt, as in ADR-0001.
+          exempt='^(master|main|develop|DEV|release/.+|phase[0-9]+|FT(/.+)?|UAT(/.+)?|dependabot/.+)$'
+          if [[ "$BRANCH" =~ $exempt ]]; then
+            echo "Long-lived or bot branch; exempt."
+            exit 0
+          fi
+
+          re='^(feat|fix|docs|chore|refactor|test|ci)/[a-z0-9]+(-[a-z0-9]+)*$'
+          if [[ ! "$BRANCH" =~ $re ]]; then
+            {
+              echo "::warning title=Branch name is not ADR-0001::\"${BRANCH}\" does not match <type>/<short-description>."
+              echo "Branch names are lowercase kebab-case and start with a type: feat, fix, docs, chore, refactor, test, ci."
+              echo "Example: fix/login-redirect. This is a warning only; a branch cannot be renamed once its pull request is open."
+              echo "Some AI tools use their own branch prefix. Rename the branch before raising the next pull request."
+              echo "See https://github.com/SalesWorks-IT/.github/blob/main/docs/adr/0001-conventional-commits-and-branch-naming.md"
+            } >&2
+            exit 0
+          fi
+          echo "Branch name follows ADR-0001."
