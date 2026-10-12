@@ -68,6 +68,8 @@ A branch name is lowercase kebab-case and starts with a type prefix from the tab
 
 Use hyphens only, never underscores or spaces, and keep the name short. `feat/auth-biometric-toggle` and `fix/login-redirect` are good. `feature/biometrics` (wrong type), `fix_login` (underscores), and `upgrade-deps` (no type prefix) are not.
 
+This applies to short-lived branches that carry a change. Long-lived branches that already exist, such as the default branch, `develop`, `DEV`, `release/*`, per-phase branches, and `FT/*` or `UAT/*` environment branches, keep their names. [ADR-0002](0002-trunk-based-development.md) covers whether to keep them. Bot branches such as `dependabot/*` are also exempt.
+
 ### Pull request titles
 
 The pull request title follows the commit format above. When the pull request is squash-merged, the title becomes the commit message on the default branch, so it is the one that matters most. Reviewers may ask for a reword before merge.
@@ -78,6 +80,17 @@ Prefer **squash merge**, so each pull request lands as one conventional commit. 
 
 History that exists before a repository adopts this ADR is not rewritten.
 
+### AI-authored changes
+
+These rules apply to every change, whoever or whatever wrote it. That includes commits, branches, and pull requests made with an AI coding agent, whether it runs in an editor, in a terminal, or in the cloud.
+
+- **The person is accountable.** The person who opens or merges the pull request is responsible for it meeting this ADR, exactly as if they had typed the change themselves. An agent acting under a person's account has that person's name on the result.
+- **Fix tool defaults before the pull request.** Some agent tools name branches with their own prefix, or title pull requests with a placeholder such as `[WIP]`. Rename the branch before the pull request is raised, and reword the title before it is merged.
+- **Agents read the repository's `AGENTS.md`.** It states these rules for agents. A repository without one gives an agent no guidance, which is why adding it is part of [adoption](#adoption).
+- **The same checks apply.** The checks below look at the branch and the title, not at who made them.
+
+Review depth, disclosure of AI-assisted commits, and which changes need a human to approve them are separate decisions and are not made here.
+
 ### Enforcement
 
 Adopting this ADR does not block anything on its own. Enforcement is a separate, per-repository choice:
@@ -85,7 +98,8 @@ Adopting this ADR does not block anything on its own. Enforcement is a separate,
 | Layer | Mechanism | Status |
 |-------|-----------|--------|
 | **Guidance** | This ADR, the default `CONTRIBUTING.md`, and each repository's `AGENTS.md` | In place once accepted |
-| **Pull request title check** | A shared reusable workflow in this repository that a repository calls from a short workflow of its own. It reports a failing check but does not block a merge | Proposed in its own pull request |
+| **Pull request title check** | A shared reusable workflow in this repository that a repository calls from a short workflow of its own. It reports a failing check but does not block a merge | In place in the pilot repositories |
+| **Branch name check** | A second job in the same reusable workflow. It reports a warning, not a failure, because a branch cannot be renamed once its pull request is open | Proposed in its own pull request |
 | **Commit message check** | A `commit-msg` hook, for repositories that commit directly to the default branch | Follow-up |
 | **Organisation ruleset** | A commit message pattern rule applied across repositories | Depends on the GitHub plan; confirm before relying on it |
 
