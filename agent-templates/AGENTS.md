@@ -53,6 +53,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). T
 - **Scope:** optional, lowercase. TODO: list this repository's scopes, or delete this line.
 - **Breaking change:** put `!` after the type or scope, or add a `BREAKING CHANGE:` footer.
 - **Branch name:** lowercase kebab-case, `<type>/<short-description>`, for example `fix/login-redirect`.
+- **ClickUp task ID** (where work is tracked in ClickUp): branch `<type>/<task-id>-<short-slug>`; PR title ends with the ID, for example `fix: clear analyzer warnings (z93r0bcg96)`; first line of the PR body is `ClickUp: [<task name>](<url>)`. If you have no task ID, ask for one. Never invent it.
 - **Merging:** prefer squash merge, so the pull request title becomes the commit message.
 - Merge commits, `git revert` messages, and `fixup!` or `squash!` commits are exempt.
 - Example: `fix(auth): clear the session before redirecting to login`.
