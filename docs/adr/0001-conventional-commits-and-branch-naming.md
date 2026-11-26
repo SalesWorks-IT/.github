@@ -4,6 +4,7 @@
 |---|---|
 | **Status** | Proposed |
 | **Date** | 2026-10-07 |
+| **Amended** | 2026-11-26 |
 
 ## Context
 
@@ -64,6 +65,7 @@ A branch name is lowercase kebab-case and starts with a type prefix from the tab
 ```text
 <type>/<short-description>
 <type>/<scope>-<short-description>
+<type>/<task-id>-<short-description>
 ```
 
 Use hyphens only, never underscores or spaces, and keep the name short. `feat/auth-biometric-toggle` and `fix/login-redirect` are good. `feature/biometrics` (wrong type), `fix_login` (underscores), and `upgrade-deps` (no type prefix) are not.
@@ -73,6 +75,17 @@ This applies to short-lived branches that carry a change. Long-lived branches th
 ### Pull request titles
 
 The pull request title follows the commit format above. When the pull request is squash-merged, the title becomes the commit message on the default branch, so it is the one that matters most. Reviewers may ask for a reword before merge.
+
+### Task IDs
+
+Where work is tracked in ClickUp, every change names its task, so the GitHub integration links the pull request to the ticket and the ID stays in the history:
+
+- **Branch:** `<type>/<task-id>-<short-description>`, for example `fix/z93r0bcg96-analyzer-warnings-core`. The description is a short form of the task name.
+- **Pull request title:** a conventional title written from the task name, with the task ID at the end of the description, for example `fix: clear analyzer warnings in core (z93r0bcg96)`. Do not use the task name verbatim, because task names rarely meet the subject line rules. The ID survives the squash merge, so `git log --grep <task-id>` finds the change.
+- **Pull request body:** the first line is `ClickUp: [<exact task name>](<task url>)`.
+- **No task, no pull request.** If no task ID is given, an agent asks for one and does not invent one. Work with no ticket gets a ticket first.
+
+A bare task ID in the pull request title is enough for ClickUp to link it; no `CU-` prefix is needed. This was confirmed in NovaAPI, and only for the title. Linking from a branch name or the body alone is untested.
 
 ### Merging
 
@@ -117,10 +130,12 @@ Adoption is phased. A repository adopts this ADR from its next commit, and recor
 - Changelogs and release notes can be generated later.
 - People and agents share one explicit contract.
 - Branch names correlate with commit types.
+- Pull requests and tickets can be found from either side.
 
 ### Negative
 
 - A small learning cost for people who have not used Conventional Commits.
+- The task ID takes about 13 of the 72 title characters, and a change needs a ticket before it starts.
 - Without enforcement the standard drifts, as it did before it was written down.
 - Repositories that commit straight to the default branch need a hook or ruleset to be covered at all.
 
@@ -133,3 +148,4 @@ Adoption is phased. A repository adopts this ADR from its next commit, and recor
 
 - [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/)
 - Origin: ADR-0018 in the `supernova` repository
+- NovaAPI [ADR-0006](https://github.com/SalesWorks-IT/NovaAPI/blob/master/docs/adr/0006-clickup-task-id-in-branches-and-pull-requests.md), which first recorded the task ID rule
