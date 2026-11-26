@@ -9,6 +9,11 @@ body:
     validations:
       required: true
   - type: textarea
+    id: impact
+    attributes:
+      label: Impact and workaround
+      description: Who is affected and how often? Is there a workaround?
+  - type: textarea
     id: repro
     attributes:
       label: Steps to reproduce
@@ -28,4 +33,16 @@ body:
     id: context
     attributes:
       label: Environment and context
-      description: Version, environment, and anything else that helps. Do not paste secrets or customer data.
+      description: Version or build, platform or device, and environment (e.g. UAT, production). Does it happen on the default branch, or only after a recent change? Do not paste secrets or customer data.
+  - type: textarea
+    id: cause
+    attributes:
+      label: Cause and possible fix
+      description: Optional. If you know why it happens, explain step by step, and say what you checked and what you're guessing.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How will we know it's fixed?
+      placeholder: |
+        - [ ]
