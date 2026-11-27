@@ -17,8 +17,6 @@ Do not push before the confirmation in step 8.
 
 - Run `git status` and read the diff against the default branch. The real base
   branch is settled in step 3.
-- Check whether a PR already exists for the current branch
-  (`gh pr list --head <branch>`). If one does, see the last bullet of step 8.
 - If the changes are on the default branch or another shared branch, create a
   new branch for them in step 3. Never commit to a shared branch.
 - If there are uncommitted changes that are not part of this task, leave them
@@ -42,12 +40,16 @@ this step and the task ID elsewhere if it does not.
    - Assignee: the engineer. Use the ClickUp user "me", or `git config user.email`
      to find them. If you cannot tell, ask.
    - Description: what changed and why, taken from the diff.
+   The engineer's yes to this question is the approval to create the item.
    Then create it and use the ID ClickUp returns.
 4. **No ClickUp access, or the engineer has no ID and will not create one.**
-   Never invent an ID. No task, no PR (org ADR-0001): commit locally on a
-   branch named `<type>/<short-slug>`, do **not** push, and do **not** open the
-   PR. Tell the engineer what is ready and that a task ID is the only thing
-   missing.
+   Ask once for an ID or URL. If there is none, never invent one. No task, no
+   PR (org ADR-0001). Still do steps 4 and 5: check the change and commit it
+   locally on a branch named `<type>/<short-slug>`, with the commit subject
+   written without a task ID. Do **not** push and do **not** open the PR. Tell
+   the engineer the work is ready and a task ID is the only thing missing.
+   To resume once they have an ID: rename the branch (step 3), amend the
+   commit subject to add the ID (keep the trailer), then continue from step 6.
 
 Do not change the task's status unless the user asks. Statuses are the team's
 convention.
@@ -56,13 +58,17 @@ convention.
 
 - Name: `<type>/<task-id>-<short-slug>`, lowercase letters, digits and hyphens
   only, with one `/` after the type. Lowercase the task ID. Keep the slug to
-  about five words.
+  about five words, taken from the outcome in the title, not from a bug report
+  wording such as "crashes".
   Types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `ci`.
 - Work may have started on a branch with a temporary or tool-generated name.
   Rename it (`git branch -m`) before pushing.
 - Branch from the base branch the user or tech lead names, or the one
   `AGENTS.md` names. If neither, **ask**. Do not guess between `DEV`,
   `release/*`, `hotfix/*` and the default branch.
+- Once the branch has its final name, check whether a PR already exists for it
+  (`gh pr list --head <branch>`). If one does, see the last bullet of step 8.
+  If `gh` is not available, say the check was not done.
 
 ## 4. Check the change
 
@@ -77,15 +83,7 @@ convention.
   deployment pipelines, `AGENTS.md`, and `CODEOWNERS`. A tech lead must
   approve these.
 
-## 5. Commit locally
-
-- Commit messages follow the title format in step 6. A single-commit branch
-  uses the PR title as its subject, task ID included. On a branch with several
-  commits, only the PR title needs the ID, because the squash merge uses it.
-- Say when AI wrote it (recommended by org ADR-0003): a `Co-Authored-By`
-  trailer on the commit.
-
-## 6. Write the title
+## 5. Write the title
 
 `<type>[(scope)][!]: <description> (<task-id>)`
 
@@ -93,6 +91,14 @@ convention.
 - At most 72 characters including the task ID.
 - Written from the task name, not copied verbatim.
 - Example: `fix: clear analyzer warnings in core (z93r0bcg96)`
+
+## 6. Commit locally
+
+- Commit messages follow the title format in step 5. A single-commit branch
+  uses the PR title as its subject, task ID included. On a branch with several
+  commits, only the PR title needs the ID, because the squash merge uses it.
+- Say when AI wrote it (recommended by org ADR-0003): a `Co-Authored-By`
+  trailer on the commit. Keep it if you amend the commit.
 
 ## 7. Write the body
 
@@ -103,18 +109,25 @@ Fill every section: Summary, Risk and rollback, Testing notes, Checklist, Relate
 - First line, above the first heading: `ClickUp: [<exact task name>](<task url>)`
 - Risk and rollback names any high-risk area from step 4.
 - Testing notes say what was run and what was not.
-- Checklist: tick a box only when it is true and you checked it. Leave the
-  others unticked with a short reason, for example "no linter configured".
-  Never tick the squash-merge box; that is for whoever merges.
+- Checklist: tick a box only when it is true and you checked it. If an item
+  does not apply, tick it and add `(n/a: reason)`. "Tests and linters pass" is
+  ticked when the tests pass and no linter is configured; add
+  `(no linter configured)`. Leave an item unticked, with the reason, only when
+  it applies and was not done. Never tick the squash-merge box; that is for
+  whoever merges.
 - Related: `Related to <ClickUp task URL>`. Use "Closes" only for an issue
   that closes when the PR merges into the default branch.
-- Add a line saying AI wrote it (ADR-0003 recommends this), unless the
-  repository's `AGENTS.md` says otherwise.
+- Add one line: `Written with AI assistance (Claude Code).` Make no claim
+  about who reviewed it. One line is enough if your tool adds its own
+  attribution.
 
 ## 8. Confirm, push, open it, then link it back
 
 - **Ask** to confirm the title, base branch and body. If the engineer changes
-  the title, amend a single commit's message to match before pushing.
+  the title on a single-commit branch, amend the commit message to match before
+  pushing (keep the trailer). On a branch with several commits only the PR
+  title changes. Apply any change to the body or base branch before creating
+  the PR.
 - Push the branch, then create the PR with `gh pr create`. Take the PR URL
   from its output.
 - Add a comment on the ClickUp task with the PR URL. Check that ClickUp shows
