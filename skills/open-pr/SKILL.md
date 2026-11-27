@@ -44,12 +44,13 @@ this step and the task ID elsewhere if it does not.
    Then create it and use the ID ClickUp returns.
 4. **No ClickUp access, or the engineer has no ID and will not create one.**
    Ask once for an ID or URL. If there is none, never invent one. No task, no
-   PR (org ADR-0001). Still do steps 4 and 5: check the change and commit it
+   PR (org ADR-0001). Still do steps 4 and 6: check the change and commit it
    locally on a branch named `<type>/<short-slug>`, with the commit subject
    written without a task ID. Do **not** push and do **not** open the PR. Tell
    the engineer the work is ready and a task ID is the only thing missing.
-   To resume once they have an ID: rename the branch (step 3), amend the
-   commit subject to add the ID (keep the trailer), then continue from step 6.
+   To resume once they have an ID: rename the branch (step 3), write the title
+   (step 5), amend the commit subject to match (step 6, keep the trailer), then
+   continue from step 7.
 
 Do not change the task's status unless the user asks. Statuses are the team's
 convention.
